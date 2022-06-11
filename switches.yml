@@ -1,0 +1,31 @@
+Production-Site:
+  - name: SW16
+    mgmt_ip: 192.168.0.216
+    port: 22
+  - name: SW17
+    mgmt_ip: 192.168.0.217
+    port: 22
+  - name: SW18
+    mgmt_ip: 192.168.0.218
+    port: 22
+  - name: SW19
+    mgmt_ip: 192.168.0.219
+    port: 22
+  - name: SW20
+    mgmt_ip: 192.168.0.220
+    port: 22
+  - name: SW21
+    mgmt_ip: 192.168.0.221
+    port: 22
+  - name: SW22
+    mgmt_ip: 192.168.0.222
+    port: 22
+  - name: SW24
+    mgmt_ip: 192.168.0.224
+    port: 22
+  - name: SW25
+    mgmt_ip: 192.168.0.225
+    port: 22
+  - name: SW26
+    mgmt_ip: 192.168.0.226
+    port: 22
