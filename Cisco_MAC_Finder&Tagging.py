@@ -23,7 +23,6 @@ def get_input(Macfiled):
     check length, if correct, pass to
     AnalyzeMac()
     '''
-    #user_input = sys.argv[1].strip()
     # get the mac @ from the file
     user_input = Macfiled
 
