@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 __author__ = "AHARCHI_Badr-eddine"
+
 import re
 import signal
 import sys
 import yaml
-
 from getpass import getpass
 from netmiko import ConnectHandler
 
@@ -45,6 +45,15 @@ def get_login():
     username = input("[+] Username: ")
     password = getpass("[+] Password: ")
     vlanid = input("[+] New VLAN ID or hit enter: ")
+    # Analyze inputs
+    if (len(vlanid) >= 1 and len(vlanid) <= 4 and vlanid.strip().isdigit()) or vlanid == '':
+        pass
+    else:
+        print('\033[91m', end="")
+        print("[❌] wrong input")
+        print('\033[0m', end="")
+        exit()
+
 
     return username, password, vlanid
 
@@ -201,12 +210,11 @@ def lookup_mac(username, password, mac, yamlfile, vlanid):
         site_items = len(site)
         print(f"[+] Looking up {site} site on {site_items} devices.")
         print("-" * 50)
-
+      
         for sw in switches[site]:
-
+            # Break the loop if the mac is seen in a switch
             if seen_in_sw:
-                if 'Fa' in port:
-                    break
+                break
 
             swname = sw['name']
             swip = sw['mgmt_ip']
@@ -222,11 +230,10 @@ def lookup_mac(username, password, mac, yamlfile, vlanid):
                 continue
 
             for line in mac_table.splitlines():
-                if mac in line:
+                if (mac in line) and (('Gi' in line) or ('Fa' in line)):
                     counter += 1
                     switch_list.append(swname)
                     vlan = line.split()[0]
-                    mactype = line.split()[2]
                     port = line.split()[3]
                     seen_in_site = True
                     seen_in_sw = True
@@ -256,7 +263,7 @@ def SSH_to_SW(username, password, swip, sshport, swname):
         'port': sshport,
         'username': username,
         'password': password,
-        'fast_cli': False, 
+        'fast_cli': False,       # Search pattern never detected in send_command
     }
 
     print('\033[1;36m', end="")
@@ -265,8 +272,8 @@ def SSH_to_SW(username, password, swip, sshport, swname):
 
     try:
         net_connect = ConnectHandler(**device)
-        mac_table = net_connect.send_command(get_mac_command, delay_factor=5)
-        net_connect.send_command("\n", delay_factor=5)
+        mac_table = net_connect.send_command(get_mac_command, delay_factor=10)
+        net_connect.send_command("\n", delay_factor=10)
         net_connect.disconnect()
         return swname, mac_table
     except Exception as e:
@@ -280,13 +287,11 @@ def Tag_port(username, password, swip, sshport, swname, port, vlanid):
     '''
     SSH to switches and configure the port
     '''
-    #get_mac_command = "show mac address-table"
     tagging_command = ['interface '+ port,
                        'shutdown',
                        'switchport voice vlan ' + vlanid,
                        'no shutdown',
-                       'end'
-                       'write']
+                       'end']
     sshport = str(sshport)
 
     device = {
@@ -295,7 +300,7 @@ def Tag_port(username, password, swip, sshport, swname, port, vlanid):
         'port': sshport,
         'username': username,
         'password': password,
-        'fast_cli': False,    
+        'fast_cli': False,       # Search pattern never detected in send_command
     }
 
     print('\033[1;36m', end="")
@@ -304,8 +309,8 @@ def Tag_port(username, password, swip, sshport, swname, port, vlanid):
 
     try:
         net_connect = ConnectHandler(**device)
-        mac_table = net_connect.send_config_set(tagging_command, delay_factor=5)
-        net_connect.send_command("\n", delay_factor=5)
+        mac_table = net_connect.send_config_set(tagging_command, delay_factor=10)
+        net_connect.send_command("\n", delay_factor=10)
         print(f"|---> [*] Interface {port} Configured with VLAN {vlanid}")
         net_connect.disconnect()
         pass
