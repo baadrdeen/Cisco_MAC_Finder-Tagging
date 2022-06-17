@@ -1,4 +1,5 @@
-# Cisco_MAC_Finder-Tagging
+Cisco_MAC_Finder-Tagging
+========================
 
 This script allows you to automate the task of searching and tagging (Optional) ports based on the MAC address on a set of sites and switches
 
@@ -6,3 +7,6 @@ This script allows you to automate the task of searching and tagging (Optional) 
 - python3
 - netmiko
 - yaml
+# Author
+
+[Badr-eddine](https://www.linkedin.com/in/badreddine-aharchi)
