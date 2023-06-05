@@ -124,8 +124,6 @@ Here is an example of how to use the script:
 
 Note: Make sure to modify the script and YAML file according to your network environment and requirements.
 
-Enjoy using the MAC lookup and VLAN tagging script!
-
 ## Author
 
-[Badr-eddine](https://www.linkedin.com/in/badreddine-aharchi)
+[Badr-eddine](https://www.linkedin.com/in/badreddine-aharchi) 
