@@ -8,25 +8,15 @@ import yaml
 from getpass import getpass
 from netmiko import ConnectHandler
 
-
+# Signal handler function to exit gracefully on SIGINT
 def signal_handler(frame, signal):
-    '''
-    Exit gracefully on SIGINT
-    '''
-
     sys.exit()
 
-
+# Function to get user input for MAC address from the terminal
 def get_input(Macfiled):
-    '''
-    Receive user input from terminal
-    check length, if correct, pass to
-    AnalyzeMac()
-    '''
-    # get the mac @ from the file
     user_input = Macfiled
 
-    # Analyze Mac @
+    # Analyze Mac address
     if len(user_input) >= 14 and len(user_input) <= 17:
         MAC, mac_format = analyze_mac(user_input)
     else:
@@ -37,14 +27,12 @@ def get_input(Macfiled):
 
     return MAC, mac_format
 
+# Function to get user login credentials from the terminal
 def get_login():
-    '''
-    Receive user input from terminal
-
-    '''
     username = input("[+] Username: ")
     password = getpass("[+] Password: ")
     vlanid = input("[+] New VLAN ID or hit enter: ")
+
     # Analyze inputs
     if (len(vlanid) >= 1 and len(vlanid) <= 4 and vlanid.strip().isdigit()) or vlanid == '':
         pass
@@ -54,15 +42,10 @@ def get_login():
         print('\033[0m', end="")
         exit()
 
-
     return username, password, vlanid
 
+# Function to analyze the MAC address format
 def analyze_mac(mac):
-    '''
-    Check whether the MAC is a Cisco
-    formatted MAC or a normal MAC.
-    '''
-    # Check based on patterns
     cisco_pattern = re.compile(r"([0-9a-fA-F]{4}(?:.[0-9a-fA-F]{4}){2})")
     linux_pattern = re.compile(r"([0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5})")
     windows_pattern = re.compile(r"([0-9a-fA-F]{2}(?:-[0-9a-fA-F]{2}){5})")
@@ -97,12 +80,8 @@ def analyze_mac(mac):
 
     return MAC, mac_format
 
-
+# Function to convert Cisco formatted MAC address to Linux format
 def convert_cisco_mac_to_linux(mac):
-    '''
-    Gets a MAC and converts it to
-    Linux format
-    '''
     char_count = 1
     total_chars = 0
     mac_addr = []
@@ -121,18 +100,13 @@ def convert_cisco_mac_to_linux(mac):
 
     return mac
 
-
+# Function to convert Linux formatted MAC address to Cisco format
 def convert_linux_mac_to_cisco(mac):
-    '''
-    Gets a MAC and converts it to
-    Cisco format
-    '''
     char_count = 1
     total_chars = 0
     mac_addr = []
 
     for char in mac.replace(":", ""):
-
         if char_count == 4 and total_chars != 11:
             mac_addr.append(char + ".")
             char_count = 1
@@ -146,18 +120,13 @@ def convert_linux_mac_to_cisco(mac):
 
     return mac
 
-
+# Function to convert Windows formatted MAC address to Cisco format
 def convert_windows_mac_to_cisco(mac):
-    '''
-    Gets a MAC and converts it to
-    Cisco format
-    '''
     char_count = 1
     total_chars = 0
     mac_addr = []
 
     for char in mac.replace("-", ""):
-
         if char_count == 4 and total_chars != 11:
             mac_addr.append(char + ".")
             char_count = 1
@@ -171,22 +140,14 @@ def convert_windows_mac_to_cisco(mac):
 
     return mac
 
-
+# Function to open and read a YAML file
 def open_yaml_file(yamlfile):
-    '''
-    opens a YAML file and returns
-    its content to lookup_mac()
-    '''
     with open(yamlfile, "r") as swfile:
         switches = yaml.safe_load(swfile)
     return switches
 
-
+# Function to look up MAC address in the provided MAC table
 def lookup_mac(username, password, mac, yamlfile, vlanid):
-    '''
-    receives MAC table and looks for
-    intended mac
-    '''
     counter = 0
     switches = open_yaml_file(yamlfile)
     sites = switches.keys()
@@ -202,8 +163,6 @@ def lookup_mac(username, password, mac, yamlfile, vlanid):
     print('\033[92m', end="")
 
     for site in sites:
-
-        # Break the loop if the mac is seen in a site
         if seen_in_site:
             break
 
@@ -212,7 +171,6 @@ def lookup_mac(username, password, mac, yamlfile, vlanid):
         print("-" * 50)
       
         for sw in switches[site]:
-            # Break the loop if the mac is seen in a switch
             if seen_in_sw:
                 break
 
@@ -240,7 +198,6 @@ def lookup_mac(username, password, mac, yamlfile, vlanid):
                     if vlanid:
                         Tag_port(username, password, swip, sshport, swname, port, vlanid)
 
-
     print(f"[+] MAC was seen on {counter} switch(es)")
 
     for sw in switch_list:
@@ -248,12 +205,8 @@ def lookup_mac(username, password, mac, yamlfile, vlanid):
 
     print('\033[0m')
 
-
+# Function to establish an SSH connection to a switch and retrieve the MAC address table
 def SSH_to_SW(username, password, swip, sshport, swname):
-    '''
-    SSH to switches and look
-    for MAC address
-    '''
     get_mac_command = "show mac address-table"
     sshport = str(sshport)
 
@@ -263,7 +216,7 @@ def SSH_to_SW(username, password, swip, sshport, swname):
         'port': sshport,
         'username': username,
         'password': password,
-        'fast_cli': False,       # Search pattern never detected in send_command
+        'fast_cli': False,
     }
 
     print('\033[1;36m', end="")
@@ -283,10 +236,8 @@ def SSH_to_SW(username, password, swip, sshport, swname):
         print('\033[0m', end="")
         pass
 
+# Function to configure a switch port with a specific VLAN
 def Tag_port(username, password, swip, sshport, swname, port, vlanid):
-    '''
-    SSH to switches and configure the port
-    '''
     tagging_command = ['interface '+ port,
                        'shutdown',
                        'switchport voice vlan ' + vlanid,
@@ -300,7 +251,7 @@ def Tag_port(username, password, swip, sshport, swname, port, vlanid):
         'port': sshport,
         'username': username,
         'password': password,
-        'fast_cli': False,       # Search pattern never detected in send_command
+        'fast_cli': False,
     }
 
     print('\033[1;36m', end="")
@@ -321,15 +272,14 @@ def Tag_port(username, password, swip, sshport, swname, port, vlanid):
         print('\033[0m', end="")
         pass
 
-
+# Main function
 def main():
-    
     signal.signal(signal.SIGINT, signal_handler)
-    mac_list = open ('MAC_file.txt')
+    mac_list = open('MAC_file.txt')
     username, password, vlanid = get_login()
     
     for mac in mac_list:
-        mac=mac.strip()
+        mac = mac.strip()
         mac, platform = get_input(mac)
         if platform == "linux":
             mac = convert_linux_mac_to_cisco(mac)
@@ -337,7 +287,6 @@ def main():
             mac = convert_windows_mac_to_cisco(mac)
         
         lookup_mac(username, password, mac, "switches.yml", vlanid)
-
 
 if __name__ == "__main__":
     main()
