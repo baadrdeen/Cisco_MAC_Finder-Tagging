@@ -43,9 +43,9 @@ You have the option to provide a VLAN ID. If you choose to do so, the script wil
 
 Here is an example of how to use the script:
 
-1. Create a file named `MAC_file.txt` in the same directory and add the MAC addresses to be looked up, each on a new line.
+1. Edit a file named `MAC_file.txt` in the same directory and add the MAC addresses to be looked up, each on a new line.
 
-2. Create a YAML file named `switches.yml` containing the switch information. The format should be as follows:
+2. Edit a YAML file named `switches.yml` containing the switch information. The format should be as follows:
 
    ```yaml
    switch_site:
