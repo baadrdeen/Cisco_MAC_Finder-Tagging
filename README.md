@@ -1,3 +1,4 @@
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/baadrdeen/Cisco_MAC_Finder-Tagging)
 # MAC Lookup and VLAN Tagging Script
 
 This Python script is designed to perform MAC address lookup in a network infrastructure and optionally tag the corresponding switch ports with a VLAN ID. It utilizes the Netmiko library for SSH connectivity to network devices and supports Cisco-formatted, Linux-formatted, and Windows-formatted MAC addresses.
