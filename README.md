@@ -13,7 +13,7 @@ This Python script is designed to perform MAC address lookup in a network infras
 To run the script, execute the following command:
 
 ```
-python mac_lookup.py
+python3 Cisco_MAC_Finder&Tagging.py
 ```
 
 ### Input
@@ -59,7 +59,7 @@ Here is an example of how to use the script:
 3. Run the script using the command:
 
    ```
-   python mac_lookup.py
+   python3 Cisco_MAC_Finder&Tagging.py
    ```
 
 4. Enter your username, password, and VLAN ID (if desired) when prompted.
