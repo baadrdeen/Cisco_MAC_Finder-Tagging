@@ -71,6 +71,22 @@ Here is an example of how to use the script:
 
 Note: Make sure to modify the script and YAML file according to your network environment and requirements.
 
+Certainly! Here's the formatted use case that you can insert into your README file on GitHub:
+
+## Use Case Scenario
+A network administrator wants to streamline the process of locating MAC addresses in the network and assigning them to specific VLANs. They have a list of MAC addresses stored in a file (MAC_file.txt), and they want to automate the process of searching for these MAC addresses across multiple switches and configuring the associated switch ports with a specific VLAN.
+
+The administrator runs the script and is prompted to enter their login credentials (username and password) and the VLAN ID they want to assign to the switch ports. The script then reads the MAC addresses from the file, one by one, and performs the following steps for each MAC address:
+
+1. Analyzes the MAC address format to determine if it is in Cisco, Linux, or Windows format.
+2. Converts the MAC address to Cisco format if necessary.
+3. Searches for the MAC address in the MAC address table of each switch defined in the switches.yml file.
+4. If the MAC address is found on a switch, the script records the switch name, VLAN, and port where the MAC address is located.
+5. If a VLAN ID is provided, the script configures the switch port with the specified VLAN using SSH commands.
+6. After processing all MAC addresses, the script displays the number of switches where each MAC address was found and provides a summary of the switch names, ports, and VLANs associated with each MAC address.
+
+By using this script, the network administrator can save time and effort by automating the process of MAC address lookup and VLAN configuration, making network management more efficient and less error-prone.
+
 ## Author
 
 [Badr-eddine](https://www.linkedin.com/in/badreddine-aharchi) 
