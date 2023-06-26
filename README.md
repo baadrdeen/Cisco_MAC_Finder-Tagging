@@ -87,6 +87,14 @@ The administrator runs the script and is prompted to enter their login credentia
 
 By using this script, the network administrator can save time and effort by automating the process of MAC address lookup and VLAN configuration, making network management more efficient and less error-prone.
 
+## Contributing
+
+Contributions are welcome! If you encounter any issues or have suggestions for improvements, please create an issue or submit a pull request.
+
 ## Author
 
-[Badr-eddine](https://www.linkedin.com/in/badreddine-aharchi) 
+[Badr-eddine](https://www.linkedin.com/in/badreddine-aharchi)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
